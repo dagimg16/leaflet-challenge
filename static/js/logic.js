@@ -1,7 +1,7 @@
 // Create the map object with center and zoom options.
 let map = L.map("map", {
-  center: [27.96, -82.30],
-  zoom: 7
+  center: [39.8283, -98.5795],
+  zoom: 5
 });
 
 // Create the 'basemap' tile layer that will be the background of our map.
@@ -40,7 +40,7 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
     const depth = feature.geometry.coordinates[2];
     const magnitude = feature.properties.mag;
     return {
-      opacity: 0.7,
+      opacity: 0.8,
       fillOpacity: 0.7,
       fillColor: getColor(depth),
       color: "white",
@@ -61,12 +61,12 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
   }
   // This function determines the radius of the earthquake marker based on its magnitude.
   function getRadius(magnitude) {
-    if (magnitude > 7) return 30;
-    else if (magnitude > 6) return 25;  
-    else if (magnitude > 5) return 20; 
-    else if (magnitude > 4) return 15;
-    else if (magnitude > 2) return 10; 
-    else return 5;  
+    if (magnitude > 7) return 45;
+    else if (magnitude > 6) return 30;  
+    else if (magnitude > 5) return 25; 
+    else if (magnitude > 4) return 20;
+    else if (magnitude > 2) return 15; 
+    else return 10;  
 
   }
 
@@ -98,18 +98,41 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
   // Then add all the details for the legend
   legend.onAdd = function () {
     let div = L.DomUtil.create("div", "info legend");
-
-    // Initialize depth intervals and colors for the legend
-
-
-    // Loop through our depth intervals to generate a label with a colored square for each interval.
-
-
+  
+    let depths = [-10, 10, 30, 50, 70, 90];
+    let colors = ["#98ee00", "#d4ee00", "#eecc00", "#ee9c00", "#ea822c", "#ea2c2c"];
+  
+    div.innerHTML = `
+      <div style="background: white; padding: 8px; display: flex;">
+        <div style="
+          width: 20px;
+          height: 150px;
+          background: linear-gradient(to top, ${colors.slice().reverse().join(',')});
+          border: 1px solid #999;
+          margin-right: 8px;">
+        </div>
+        <div id="legend-labels" style="
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          height: 150px;
+          font-size: 12px;">
+        </div>
+      </div>
+    `;
+  
+    let labelDiv = div.querySelector("#legend-labels");
+    for (let i = 0; i < depths.length; i++) {
+      let span = document.createElement("span");
+      span.textContent = `${depths[i]}–${depths[i + 1] ? depths[i + 1] : "+"}`;
+      labelDiv.appendChild(span);
+    }
+  
     return div;
   };
-
   // Finally, add the legend to the map.
-
+  
+  legend.addTo(map); 
 
   // OPTIONAL: Step 2
   // Make a request to get our Tectonic Plate geoJSON data.
