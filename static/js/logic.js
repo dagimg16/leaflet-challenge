@@ -43,7 +43,7 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
       opacity: 0.8,
       fillOpacity: 0.7,
       fillColor: getColor(depth),
-      color: "white",
+      color: "black",
       radius: getRadius(magnitude),
       stroke: true,
       weight: 0.5
